@@ -1,0 +1,1818 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>CERT Online</title>
+  <link rel="stylesheet" href="steps-cert_online/assets/spectre.css"></link>
+
+  <link rel="stylesheet" href="steps-cert_online/assets/toc.css"></link>
+  <link rel="stylesheet" href="steps-cert_online/assets/common.css"></link>
+  <script src="steps-cert_online/assets/toc.js"></script>
+
+  <style>
+    .bg {
+      background-color: #eff0f3;
+    }
+    .headline {
+      color: #0d0d0d;
+    }
+    .topSection {
+      padding: 50px .5rem;
+    }
+    .card {
+      border: 0;
+      box-shadow: 0 0.25rem 1rem rgba(48,55,66,.15);
+      height: 100%;
+      margin-bottom: 3.5rem;
+    }
+    .headerLogo {
+      top: 20px;
+      right: 20px;
+      float: right;
+      z-index: 10;
+      position: fixed;
+      padding: 10px;
+      box-shadow: 0 0.25rem 1rem rgba(48,55,66,.15);
+      background-color: white;
+      cursor: pointer;
+    }
+    .headerLogo a img{
+      border: 0;
+    }
+    .card-header {
+      display: flex;
+    }
+    .card-header, .card-body {
+      padding-left: 2rem !important;
+    }
+    .card-image {
+      text-align: center;
+      padding: 0.5rem;
+    }
+    .card-image img{
+      box-shadow: 0 0.25rem 1rem rgba(48,55,66,.15);
+      /* max-width: 750px; */
+      margin: 0.7rem auto;
+      display: unset !important;
+    }
+    .toc, .tocFake {
+      z-index: 10;
+      position: fixed;
+      top: 60px;
+      left: 15px;
+      max-width: 250px;
+      padding: 10px;
+      box-shadow: 0 0.25rem 1rem rgba(48,55,66,.15);
+      background-color: white;
+      overflow: auto;
+      max-height: calc(80vh);
+    }
+    .tocFake {
+      cursor: pointer;
+      top: 20px;
+    }
+    @media (max-width:1350px){
+      .toc {
+        max-width: 200px;
+      }
+    }
+    @media (max-width:1150px){
+      .headerLogo {
+        display: none;
+      }
+    }
+    .headline:focus, .headline:hover {
+      outline : none !important;
+    }
+    .toc-link::before{
+      width:5px;
+    }
+    .is-active-link::before{
+      background-color: rgba(255,196,35,1);
+    }
+    .toc-link {
+      font-size: 0.8em;
+    }
+    .doubleCheesburger {
+      width: 12px;
+      height: 12px;
+      background-size: contain;
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABmJLR0QA/wD/AP+gvaeTAAAAw0lEQVR4nO3YMQ7CMAxG4Qc74gJlRL07qjgBV+rQXCAMHUBRhiAKSdv3SV482R48/CBJkiRJLxdgAAIQV14BuAP9J8uPDQy+dI1AV3KAoYFhf1W3dNlD5gABOJVcaoUCcH5vHCsNUktMG7kDPP4wSC1Fu/Vs9wleSy/VMT+MqYHBv62J+bEXLy9JkvbNPKCBwZcu8wDMA8wDYtowD8gwD8A8QJIk7Zh5QAODL13mAZgHmAfEtGEekGEegHmAJEmSpI17AhoPKkbYwzDbAAAAAElFTkSuQmCC);
+    }
+    .form-checkbox {
+      display: inline;
+      margin: 0;
+      margin-right: 5px;
+    }
+    input[type="checkbox"], .form-icon {
+      transform:scale(1.5, 1.5);
+    }
+    .stepCard {
+      padding-bottom: 1.5rem;
+      padding-top: 0.5rem;
+    }
+    .stepTitle {
+      display:inline-block;
+    }
+    .substepTitle {
+      font-weight: 600;
+      text-align: center;
+      margin: .8rem 0;
+    }
+
+    .card {
+      border: 2px solid transparent;
+    }
+    .completedCard {
+      border: 2px solid #2a9a39;
+      box-shadow: 0 0.25rem 1rem rgb(43 154 56 / 0.45);
+    }
+
+    .form-checkbox input:checked+.form-icon,
+    .form-radio input:checked+.form-icon,
+    .form-switch input:checked+.form-icon {
+      background: #00c400;
+      border-color: #00c400
+    }
+
+    .form-checkbox input:focus+.form-icon,
+    .form-radio input:focus+.form-icon,
+    .form-switch input:focus+.form-icon {
+      border-color: #00c400;
+      box-shadow: 0 0.25rem 1rem rgb(43 154 56 / 0.2);
+    }
+
+    .form-checkbox input:indeterminate+.form-icon {
+      background: #00c400;
+      border-color: #00c400
+    }
+    .form-checkbox.bottom {
+      margin-bottom: 15px;
+      margin-left: auto;
+      margin-right: 10px;
+      margin-top: 5px;
+    }
+    @media (max-width:992px){
+      p {margin:0}
+      blockquote {margin:0}
+      .container.grid-md {max-width:1296px}
+      .card {margin-bottom:1rem}
+      .col-xs-10,.col-md-10,.col-xl-10 {width:100%}
+    }
+
+    /* KEEP IN SYNC WITH RENDERE/ASSETS/TEXTBLOCK.CSS!!!!!!!!!!! */
+/* ALSO COLORS ARE IN TEXTBLOCK.JS */
+.stepTextBlock {
+  display: flex;
+  border-radius: 0.25em;
+  border-bottom: 3px solid transparent;
+  flex-direction: row;
+  align-items: center;
+  padding: 0.75em;
+  margin: 1em 0em;
+}
+.stepTextBlock.error {
+  border-color: #feb2b2;
+  background-color: #fed7d7;
+}
+.stepTextBlock.info {
+  border-color: #90cdf4;
+  background-color: #bee3f8;
+}
+.stepTextBlock.success {
+  border-color: #9ae6b4;
+  background-color: #c6f6d5;
+}
+.stepTextBlock.warning {
+  border-color: #faf089;
+  background-color: #fefcbf;
+}
+
+.stepTextBlock.dark {
+  border-color: #e5e7eb;
+  background-color: #f9fafb;
+}
+
+.stepTextBlock .stepTextBlockIcon {
+  width: 2.5em;
+  height: 2.5em;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  border: 2px solid transparent;
+  border-radius: 9999px;
+}
+.stepTextBlock.error .stepTextBlockIcon {
+  border-color: #f56565;
+  background-color: #fff5f5;
+  color: #f56565;
+}
+.stepTextBlock.info .stepTextBlockIcon {
+  border-color: #4299e1;
+  background-color: #ebf8ff;
+  color: #4299e1;
+}
+.stepTextBlock.success .stepTextBlockIcon {
+  border-color: #48bb78;
+  background-color: #f0fff4;
+  color: #48bb78;
+}
+.stepTextBlock.warning .stepTextBlockIcon {
+  border-color: #ecc94b;
+  background-color: #fffff0;
+  color: #ecc94b;
+}
+.stepTextBlock.dark .stepTextBlockIcon {
+  border-color: #e5e7eb;
+    /* No BG intentionally */
+  color: #e5e7eb;
+}
+
+.stepTextBlock .stepTextBlockIcon svg{
+  width: 1.5em;
+}
+.stepTextBlock .stepTextBlockContent {
+  margin-left: 1em;
+}
+.stepTextBlock .stepTextBlockTitle {
+  font-size: 1.125em;
+  font-weight: 600;
+}
+.stepTextBlock.error .stepTextBlockTitle {
+  color: #9b2c2c;
+}
+.stepTextBlock.dark .stepTextBlockTitle {
+  color: #212936;
+}
+.stepTextBlock.info .stepTextBlockTitle {
+  color: #2c5282;
+}
+.stepTextBlock.success .stepTextBlockTitle {
+  color: #276749;
+}
+.stepTextBlock.warning .stepTextBlockTitle {
+  color: #975a16;
+}
+.stepTextBlock .stepTextBlockDescription {
+  font-size: .875em;
+}
+.stepTextBlock.error .stepTextBlockDescription {
+  color: #e53e3e;
+}
+.stepTextBlock.info .stepTextBlockDescription {
+  color: #3182ce;
+}
+.stepTextBlock.success .stepTextBlockDescription {
+  color: #38a169;
+}
+.stepTextBlock.warning .stepTextBlockDescription {
+  color: #d69e2e;
+}
+.stepTextBlock.dark .stepTextBlockDescription {
+  color: #1f2937;
+}
+.stepTextBlock .stepTextBlockDescription p {
+  padding: 0;
+  margin: 0;
+}
+
+    .stepTextBlock {
+      margin-left: 5%;
+      margin-right: 5%;
+    }
+
+    
+  </style>
+
+  <script>
+    var exportSettings = {"docTemplate":"default","imageExportPath":"steps-[[gtitle]]/step-[[index]].[[ext]]","format":"jpeg","quality":"100","imageSize":100,"imageAlign":"center","imageSizeMode":"percentage","imageSizeFitWidth":725,"imageSizeFitHeight":700,"oneStepPerPage":false,"includeTOS":true,"includeTOCSubSteps":false,"includeCoverPage":true,"includeNumbers":true,"embeddableExport":false,"embedAssets":false,"textPosition":"top","includeCheckboxes":true,"tocHeadline":"Table of contents","includeFooter":true,"includeHeader":true,"headerText":"[[Guide_Title]]","headerLogo":null,"headerLogoLink":null,"headerLogoAlign":"right","footerNumbering":"Page [[Page_Number]]","footerLogo":null,"footerText":"[[Guide_Title]]","customCSS":"","pageOrientation":"portrait","pdfPageSize":"A4","filenameMode":"original","footerLogoAlign":"left","pdfStepMode":"mode2","stepImageBorderWidth":0,"stepImageBorderColor":"#a0a0a0","guideTitleAlignment":"center","stepTitleAlignment":"center","targetFormat":"rich","assets":[],"useCustomCoverPagePDF":false,"customCoverPagePDFTemplate":{"canvasOptions":{"backgroundColorEnabled":true,"backgroundColor":"#FFFFFF","width":718,"height":1084},"elements":[{"id":1733056105940,"type":"text","content":"[[Guide_Title]]","name":"Guide Title","left":9,"top":15,"width":80,"height":8,"fontFamily":"Roboto","fontColor":"#000000","fontWeight":"700","fontStyle":"normal","fontSize":32,"underline":false,"orderId":0,"visibility":true,"textFit":false,"textAlign":"center","alignContent":"center","color":"#3b4351"},{"id":1733056124514,"type":"text","content":"[[Guide_Description]]","name":"Guide Description","left":9,"top":25,"width":80,"height":8,"fontFamily":"Roboto","fontColor":"#000000","fontWeight":"400","fontStyle":"normal","fontSize":14,"underline":false,"orderId":1,"visibility":true,"textFit":false,"textAlign":"left","alignContent":"flex-start","color":"#3b4351"}]},"assetsVault":{},"placeholdersVault":{"Guide_Title":"CERT Online","Guide_Description":null,"Guide_CreatedAt":"03-02-2025","Guide_UpdatedAt":"05-02-2025","Date":"06-02-2025"},"preparsed":{"headers":["CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online"],"footers":["CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online","CERT Online"],"numberings":["Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]","Page [[Page_Number]]"]},"fullAssetsPath":"C:\\Users\\me4su\\AppData\\Local\\Programs\\Folge\\resources\\app.asar\\dist\\electron\\static\\templates\\html\\assets"};
+
+    window.onload = function() {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.toc',
+        positionFixedSelector: '.toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.section',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: '.headline',
+        ignoreSelector: '.substep',
+        onClick: function(e) {
+          // After user clicks ToC item, refresh tocbot to properly highlight active item
+          setTimeout(() => {
+            tocbot.refresh();
+          }, 50)
+        },
+        headingsOffset: 5,
+        headingLabelCallback: function(heading, node) {
+          var ancestor = findAncestor(node, 'card');
+          var isCompleted = ancestor && (findAncestor(node, 'card').classList.contains('completedCard'));
+          return (isCompleted ? '✅ ' : '') + heading.trim();
+        }
+      });
+      var tocFake = document.getElementsByClassName('tocFake')[0]
+      var tocReal = document.getElementsByClassName('toc')[0];
+      tocFake.addEventListener('click', function() {
+        toggleClassName(tocFake, 'show-md');
+        toggleClassName(tocReal, 'hide-md');
+      })
+      
+
+      var nodes = document.getElementsByClassName('completionCheckbox')
+      var checkboxes = Array.prototype.slice.call(nodes);
+      checkboxes.forEach(checkboxListener)
+    }
+    function toggleClassName(element, className) {
+      element.classList.toggle(className);
+    }
+    var scrollTo = (element) => {
+      window.scroll({
+        behavior: 'smooth',
+        left: 0,
+        top: element.offsetTop
+      });
+    }
+    function checkboxListener(checkbox) {
+      checkbox.addEventListener('change', function(event) {
+        var stepId = event.target.getAttribute('data-step-id');
+        var stepIdParts = stepId.split('-');
+        var isChecked = event.target.checked
+        var cardNode = document.querySelector('.card[data-step-id="'+stepId+'"]');
+        cardNode.classList.toggle('completedCard');
+        
+        if(isChecked) {
+          var nextId = parseInt(stepIdParts[1]) + 1;
+          var nextCardNode = document.querySelector('.card[data-step-id="step-'+nextId+'"]');
+          if(nextCardNode) {
+            scrollTo(nextCardNode);
+          }
+        }
+        tocbot.refresh();
+      })
+    }
+    function findAncestor (el, cls) {
+        while ((el = el && el.parentElement) && !el.classList.contains(cls));
+        return el;
+    }
+  </script>
+
+</head>
+
+
+<body class="bg">
+  <div class="tocFake show-md">
+    <div class="icon doubleCheesburger"></div>
+  </div>
+  <div class="toc hide-md"></div>
+  <div class="topSection">
+    <div class="container grid-md text-center guideDetailsWrapper">
+      <div class="columns flex-centered">
+        <div class="column col-xs-10 col-md-10 col-xl-10">
+          <h2 class="headline title">CERT Online</h2>
+        </div>
+     </div>
+    </div>
+  </div>
+  <div class="section">
+      <div class="container grid-md">
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-1">
+                <div class="stepTextBlock success card">
+  <div class="stepTextBlockIcon">
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M21.5821 5.54289C21.9726 5.93342 21.9726 6.56658 21.5821 6.95711L10.2526 18.2867C9.86452 18.6747 9.23627 18.6775 8.84475 18.293L2.29929 11.8644C1.90527 11.4774 1.89956 10.8443 2.28655 10.4503C2.67354 10.0562 3.30668 10.0505 3.70071 10.4375L9.53911 16.1717L20.1679 5.54289C20.5584 5.15237 21.1916 5.15237 21.5821 5.54289Z" fill="currentColor"/>
+</svg>
+  </div>
+  <div class="stepTextBlockContent">
+      <div class="stepTextBlockTitle">Go to CERT Website:</div>
+      <div class="stepTextBlockDescription">Go to&nbsp;<a href="https://community.fema.gov/PreparednessCommunity/s/welcome-to-cert?language=en_US">CERT Website</a></div>
+  </div>
+</div>
+              <div class="card-header card-title h5 headline   " id="step-1">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-1">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>1. </b>
+                <span class="stepTitleText">CERT Account</span>
+                </div>
+              </div>
+
+
+                                  <div class="card-body stepDescription quillClasses"><h4 style="text-align: center;">Click "Register"</h4><br></div>
+              
+                <div class="card-image">
+                                  <img 
+                  alt="CERT Account" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-0.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-2">
+              <div class="card-header card-title h5 headline   substep" id="step-2">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-2">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>1.1. </b>
+                <span class="stepTitleText">Enter info &gt; Click &quot;Register now&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Enter info &gt; Click &quot;Register now&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-1.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-3">
+              <div class="card-header card-title h5 headline   substep" id="step-3">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-3">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>1.2. </b>
+                <span class="stepTitleText">Open the email sent by FEMA &gt; Click &quot;Get Started Now&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Open the email sent by FEMA &gt; Click &quot;Get Started Now&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-2.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-4">
+              <div class="card-header card-title h5 headline   substep" id="step-4">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-4">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>1.3. </b>
+                <span class="stepTitleText">Click &quot;Continue to Verification Step&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Click &quot;Continue to Verification Step&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-3.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-5">
+              <div class="card-header card-title h5 headline   substep" id="step-5">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-5">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>1.4. </b>
+                <span class="stepTitleText">Enter the verification code from your email &gt; Click &quot;Verify Me&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Enter the verification code from your email &gt; Click &quot;Verify Me&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-4.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-6">
+              <div class="card-header card-title h5 headline   substep" id="step-6">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-6">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>1.5. </b>
+                <span class="stepTitleText">Enter a password &gt; Click &quot;Change Password&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Enter a password &gt; Click &quot;Change Password&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-5.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-7">
+                <div class="stepTextBlock success card">
+  <div class="stepTextBlockIcon">
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M21.5821 5.54289C21.9726 5.93342 21.9726 6.56658 21.5821 6.95711L10.2526 18.2867C9.86452 18.6747 9.23627 18.6775 8.84475 18.293L2.29929 11.8644C1.90527 11.4774 1.89956 10.8443 2.28655 10.4503C2.67354 10.0562 3.30668 10.0505 3.70071 10.4375L9.53911 16.1717L20.1679 5.54289C20.5584 5.15237 21.1916 5.15237 21.5821 5.54289Z" fill="currentColor"/>
+</svg>
+  </div>
+  <div class="stepTextBlockContent">
+      <div class="stepTextBlockTitle">Get a FEMA Student ID:</div>
+      <div class="stepTextBlockDescription">Go to&nbsp;<a href="https://cdp.dhs.gov/femasid">FEMA SID System</a></div>
+  </div>
+</div>
+              <div class="card-header card-title h5 headline   " id="step-7">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-7">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>2. </b>
+                <span class="stepTitleText">FEMA SID</span>
+                </div>
+              </div>
+
+
+                                  <div class="card-body stepDescription quillClasses"><h4 style="text-align: center;">Click "Register for a FEMA SID"</h4><br></div>
+              
+                <div class="card-image">
+                                  <img 
+                  alt="FEMA SID" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-6.jpeg" 
+        
+                />
+                </div>
+
+              
+                        <div class="card-body substepCard">
+                              <div class="h5 substepTitle">Fill out the info &gt; Check the box &gt; Click &quot;Register&quot;</div>
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="card-image">
+                                                <img 
+                  alt="Fill out the info &gt; Check the box &gt; Click &quot;Register&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-6-0.jpeg" 
+        
+                />
+                              </div>
+
+                          </div>
+                        <div class="card-body substepCard">
+                          </div>
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-8">
+                <div class="stepTextBlock success card">
+  <div class="stepTextBlockIcon">
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M21.5821 5.54289C21.9726 5.93342 21.9726 6.56658 21.5821 6.95711L10.2526 18.2867C9.86452 18.6747 9.23627 18.6775 8.84475 18.293L2.29929 11.8644C1.90527 11.4774 1.89956 10.8443 2.28655 10.4503C2.67354 10.0562 3.30668 10.0505 3.70071 10.4375L9.53911 16.1717L20.1679 5.54289C20.5584 5.15237 21.1916 5.15237 21.5821 5.54289Z" fill="currentColor"/>
+</svg>
+  </div>
+  <div class="stepTextBlockContent">
+      <div class="stepTextBlockDescription">Go to&nbsp;<a href="https://training.fema.gov/signin/" style="background-color: rgb(255, 255, 255);">login.gov site</a></div>
+  </div>
+</div>
+              <div class="card-header card-title h5 headline   " id="step-8">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-8">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>3. </b>
+                <span class="stepTitleText">Login.gov Account</span>
+                </div>
+              </div>
+
+
+                                  <div class="card-body stepDescription quillClasses"><h4 style="text-align: center;">Click "Sign in, or create a Login.gov account now"</h4></div>
+              
+                <div class="card-image">
+                                  <img 
+                  alt="Login.gov Account" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-7.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-9">
+              <div class="card-header card-title h5 headline   substep" id="step-9">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-9">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>3.1. </b>
+                <span class="stepTitleText">Click &quot;Create an account&quot;</span>
+                </div>
+              </div>
+
+
+                                  <div class="card-body stepDescription quillClasses"><p><span style="background-color: rgb(255, 255, 255);">https://training.fema.gov/signin/</span></p></div>
+              
+                <div class="card-image">
+                                  <img 
+                  alt="Click &quot;Create an account&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-8.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-10">
+              <div class="card-header card-title h5 headline   substep" id="step-10">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-10">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>3.2. </b>
+                <span class="stepTitleText">Enter email &gt; Check the box &gt; Click &quot;Submit&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Enter email &gt; Check the box &gt; Click &quot;Submit&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-9.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-11">
+              <div class="card-header card-title h5 headline   substep" id="step-11">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-11">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>3.3. </b>
+                <span class="stepTitleText">Open email from login.gov &gt; Click &quot;Confirm email address&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Open email from login.gov &gt; Click &quot;Confirm email address&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-10.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-12">
+              <div class="card-header card-title h5 headline   substep" id="step-12">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-12">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>3.4. </b>
+                <span class="stepTitleText">Create a password &gt; Click &quot;Continue&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Create a password &gt; Click &quot;Continue&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-11.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-13">
+              <div class="card-header card-title h5 headline   substep" id="step-13">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-13">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>3.5. </b>
+                <span class="stepTitleText">Check &quot;Text or voice message&quot; &gt; Click &quot;Continue&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Check &quot;Text or voice message&quot; &gt; Click &quot;Continue&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-12.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-14">
+              <div class="card-header card-title h5 headline   substep" id="step-14">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-14">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>3.6. </b>
+                <span class="stepTitleText">Enter phone number &gt; Click &quot;Send code&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Enter phone number &gt; Click &quot;Send code&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-13.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-15">
+              <div class="card-header card-title h5 headline   substep" id="step-15">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-15">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>3.7. </b>
+                <span class="stepTitleText">Enter verification code &gt; Click &quot;Submit&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Enter verification code &gt; Click &quot;Submit&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-14.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-16">
+              <div class="card-header card-title h5 headline   substep" id="step-16">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-16">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>3.8. </b>
+                <span class="stepTitleText">Click &quot;Skip for now&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Click &quot;Skip for now&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-15.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-17">
+              <div class="card-header card-title h5 headline   substep" id="step-17">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-17">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>3.9. </b>
+                <span class="stepTitleText">Click &quot;Agree &amp; Continue&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Click &quot;Agree &amp; Continue&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-16.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-18">
+              <div class="card-header card-title h5 headline   substep" id="step-18">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-18">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>3.10. </b>
+                <span class="stepTitleText">Click &quot;Continue&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Click &quot;Continue&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-17.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-19">
+                <div class="stepTextBlock success card">
+  <div class="stepTextBlockIcon">
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M21.5821 5.54289C21.9726 5.93342 21.9726 6.56658 21.5821 6.95711L10.2526 18.2867C9.86452 18.6747 9.23627 18.6775 8.84475 18.293L2.29929 11.8644C1.90527 11.4774 1.89956 10.8443 2.28655 10.4503C2.67354 10.0562 3.30668 10.0505 3.70071 10.4375L9.53911 16.1717L20.1679 5.54289C20.5584 5.15237 21.1916 5.15237 21.5821 5.54289Z" fill="currentColor"/>
+</svg>
+  </div>
+  <div class="stepTextBlockContent">
+      <div class="stepTextBlockDescription"><a href="https://training.fema.gov/is/courseoverview.aspx?code=IS-100.c&amp;lang=en" style="background-color: rgb(255, 255, 255);">Click here to go to FEMI EMI Independent Study</a></div>
+  </div>
+</div>
+              <div class="card-header card-title h5 headline   " id="step-19">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-19">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>4. </b>
+                <span class="stepTitleText">Course: ICS 100</span>
+                </div>
+              </div>
+
+
+                              
+
+              
+                        <div class="card-body substepCard">
+                              <div class="h5 substepTitle">Click &quot;Interactive Web based Course&quot;</div>
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="card-image">
+                                                <img 
+                  alt="Click &quot;Interactive Web based Course&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-18-0.jpeg" 
+        
+                />
+                              </div>
+
+                          </div>
+                        <div class="card-body substepCard">
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="h5 substepTitle">Proceed through ICS 100 Course</div>
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="card-image">
+                                                <img 
+                  alt="Proceed through ICS 100 Course" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-18-1.jpeg" 
+        
+                />
+                              </div>
+
+                          </div>
+                        <div class="card-body substepCard">
+                          </div>
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-20">
+              <div class="card-header card-title h5 headline   " id="step-20">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-20">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>5. </b>
+                <span class="stepTitleText">ICS 100 Exam</span>
+                </div>
+              </div>
+                <div class="stepTextBlock info card">
+  <div class="stepTextBlockIcon">
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM10.25 11C10.25 10.4477 10.6977 10 11.25 10H12.75C13.3023 10 13.75 10.4477 13.75 11V18C13.75 18.5523 13.3023 19 12.75 19H11.25C10.6977 19 10.25 18.5523 10.25 18V11ZM14 7C14 5.89543 13.1046 5 12 5C10.8954 5 10 5.89543 10 7C10 8.10457 10.8954 9 12 9C13.1046 9 14 8.10457 14 7Z" fill="currentColor"/>
+</svg>
+  </div>
+  <div class="stepTextBlockContent">
+      <div class="stepTextBlockDescription">-If you are taking the exam immediately after the course, proceed to the next step.<br><br>-If you are taking the exam in a separate sitting, go to&nbsp;<a href="https://training.fema.gov/is/courseoverview.aspx?code=IS-100.c&amp;lang=en" style="background-color: rgb(255, 255, 255);">ICS 100 page</a>&nbsp;and click "Take Final Exam Online".<br></div>
+  </div>
+</div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="ICS 100 Exam" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-19.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-21">
+              <div class="card-header card-title h5 headline   substep" id="step-21">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-21">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>5.1. </b>
+                <span class="stepTitleText">Click &quot;Take the Exam&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Click &quot;Take the Exam&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-20.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-22">
+              <div class="card-header card-title h5 headline   substep" id="step-22">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-22">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>5.2. </b>
+                <span class="stepTitleText">Click &quot;Sign in, or create a Login.gov account now&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Click &quot;Sign in, or create a Login.gov account now&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-21.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-23">
+              <div class="card-header card-title h5 headline   substep" id="step-23">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-23">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>5.3. </b>
+                <span class="stepTitleText">Enter login info &gt; Click &quot;Sign in&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Enter login info &gt; Click &quot;Sign in&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-22.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-24">
+              <div class="card-header card-title h5 headline   substep" id="step-24">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-24">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>5.4. </b>
+                <span class="stepTitleText">Click &quot;I agree&quot;</span>
+                </div>
+              </div>
+
+
+                              
+                <div class="card-image">
+                                  <img 
+                  alt="Click &quot;I agree&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-23.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-25">
+              <div class="card-header card-title h5 headline   substep" id="step-25">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-25">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>5.5. </b>
+                <span class="stepTitleText">Confirm your information is correct &gt; Click &quot;Continue to Exam&quot;</span>
+                </div>
+              </div>
+
+
+                                  <div class="card-body stepDescription quillClasses"><p>You'll receive an email with your certificate after passing.</p></div>
+              
+                <div class="card-image">
+                                  <img 
+                  alt="Confirm your information is correct &gt; Click &quot;Continue to Exam&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-24.jpeg" 
+        
+                />
+                </div>
+
+              
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-26">
+                <div class="stepTextBlock success card">
+  <div class="stepTextBlockIcon">
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M21.5821 5.54289C21.9726 5.93342 21.9726 6.56658 21.5821 6.95711L10.2526 18.2867C9.86452 18.6747 9.23627 18.6775 8.84475 18.293L2.29929 11.8644C1.90527 11.4774 1.89956 10.8443 2.28655 10.4503C2.67354 10.0562 3.30668 10.0505 3.70071 10.4375L9.53911 16.1717L20.1679 5.54289C20.5584 5.15237 21.1916 5.15237 21.5821 5.54289Z" fill="currentColor"/>
+</svg>
+  </div>
+  <div class="stepTextBlockContent">
+      <div class="stepTextBlockDescription">Go to&nbsp;<a href="https://training.fema.gov/is/courseoverview.aspx?code=IS-315.a&amp;lang=en" style="background-color: rgb(255, 255, 255);">IS-315.A</a></div>
+  </div>
+</div>
+              <div class="card-header card-title h5 headline   " id="step-26">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-26">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>6. </b>
+                <span class="stepTitleText">Course: IS-315.A</span>
+                </div>
+              </div>
+
+
+                              
+
+              
+                        <div class="card-body substepCard">
+                              <div class="h5 substepTitle">Click &quot;Interactive Web Based Course&quot;</div>
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="card-image">
+                                                <img 
+                  alt="Click &quot;Interactive Web Based Course&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-25-0.jpeg" 
+        
+                />
+                              </div>
+
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="stepDescription substepDescription quillClasses"><h3><br></h3></div>
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="h5 substepTitle">Proceed through the course</div>
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="card-image">
+                                                <img 
+                  alt="Proceed through the course" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-25-1.jpeg" 
+        
+                />
+                              </div>
+
+                          </div>
+                        <div class="card-body substepCard">
+                          </div>
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-27">
+                <div class="stepTextBlock info card">
+  <div class="stepTextBlockIcon">
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM10.25 11C10.25 10.4477 10.6977 10 11.25 10H12.75C13.3023 10 13.75 10.4477 13.75 11V18C13.75 18.5523 13.3023 19 12.75 19H11.25C10.6977 19 10.25 18.5523 10.25 18V11ZM14 7C14 5.89543 13.1046 5 12 5C10.8954 5 10 5.89543 10 7C10 8.10457 10.8954 9 12 9C13.1046 9 14 8.10457 14 7Z" fill="currentColor"/>
+</svg>
+  </div>
+  <div class="stepTextBlockContent">
+      <div class="stepTextBlockDescription">If you are taking the exam in a separate sitting, go to&nbsp;<a href="https://training.fema.gov/is/courseoverview.aspx?code=IS-315.a&amp;lang=en" style="background-color: rgb(255, 255, 255);">IS-315.A</a><br>Otherwise you may proceed immediately after completing the course.<br></div>
+  </div>
+</div>
+              <div class="card-header card-title h5 headline   " id="step-27">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-27">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>7. </b>
+                <span class="stepTitleText">IS-315.A Exam</span>
+                </div>
+              </div>
+
+
+                              
+
+              
+                        <div class="card-body substepCard">
+                              <div class="h5 substepTitle">Click &quot;Take Final Exam Online&quot;</div>
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="card-image">
+                                                <img 
+                  alt="Click &quot;Take Final Exam Online&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-26-0.jpeg" 
+        
+                />
+                              </div>
+
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="stepDescription substepDescription quillClasses">https://training.fema.gov/is/courseoverview.aspx?code=IS-315.a&lang=en</div>
+                          </div>
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-28">
+                <div class="stepTextBlock success card">
+  <div class="stepTextBlockIcon">
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M21.5821 5.54289C21.9726 5.93342 21.9726 6.56658 21.5821 6.95711L10.2526 18.2867C9.86452 18.6747 9.23627 18.6775 8.84475 18.293L2.29929 11.8644C1.90527 11.4774 1.89956 10.8443 2.28655 10.4503C2.67354 10.0562 3.30668 10.0505 3.70071 10.4375L9.53911 16.1717L20.1679 5.54289C20.5584 5.15237 21.1916 5.15237 21.5821 5.54289Z" fill="currentColor"/>
+</svg>
+  </div>
+  <div class="stepTextBlockContent">
+      <div class="stepTextBlockDescription">Go to&nbsp;<a href="https://training.fema.gov/is/courseoverview.aspx?code=IS-317.a&amp;lang=en" style="background-color: rgb(255, 255, 255);">IS-317.A</a></div>
+  </div>
+</div>
+              <div class="card-header card-title h5 headline   " id="step-28">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-28">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>8. </b>
+                <span class="stepTitleText">Course: IS-317.A</span>
+                </div>
+              </div>
+
+
+                              
+
+              
+                        <div class="card-body substepCard">
+                              <div class="h5 substepTitle">Click &quot;Interactive Web Based Course&quot; &gt; Proceed through course</div>
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="card-image">
+                                                <img 
+                  alt="Click &quot;Interactive Web Based Course&quot; &gt; Proceed through course" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-27-0.jpeg" 
+        
+                />
+                              </div>
+
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="stepDescription substepDescription quillClasses">https://training.fema.gov/is/courseoverview.aspx?code=IS-317.a&lang=en</div>
+                          </div>
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-29">
+                <div class="stepTextBlock info card">
+  <div class="stepTextBlockIcon">
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM10.25 11C10.25 10.4477 10.6977 10 11.25 10H12.75C13.3023 10 13.75 10.4477 13.75 11V18C13.75 18.5523 13.3023 19 12.75 19H11.25C10.6977 19 10.25 18.5523 10.25 18V11ZM14 7C14 5.89543 13.1046 5 12 5C10.8954 5 10 5.89543 10 7C10 8.10457 10.8954 9 12 9C13.1046 9 14 8.10457 14 7Z" fill="currentColor"/>
+</svg>
+  </div>
+  <div class="stepTextBlockContent">
+      <div class="stepTextBlockDescription">If you are taking the exam in a separate sitting, go to&nbsp;<a href="https://training.fema.gov/is/courseoverview.aspx?code=IS-317.a&amp;lang=en" style="background-color: rgb(255, 255, 255);">IS-317.A</a>.<br>Otherwise you may proceed immediately after completing the course.<br></div>
+  </div>
+</div>
+              <div class="card-header card-title h5 headline   " id="step-29">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-29">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>9. </b>
+                <span class="stepTitleText">IS-317.A Exam</span>
+                </div>
+              </div>
+
+
+                              
+
+              
+                        <div class="card-body substepCard">
+                              <div class="h5 substepTitle">Click &quot;Take Final Exam Online&quot;</div>
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="card-image">
+                                                <img 
+                  alt="Click &quot;Take Final Exam Online&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-28-0.jpeg" 
+        
+                />
+                              </div>
+
+                          </div>
+                        <div class="card-body substepCard">
+                          </div>
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-30">
+                <div class="stepTextBlock success card">
+  <div class="stepTextBlockIcon">
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M21.5821 5.54289C21.9726 5.93342 21.9726 6.56658 21.5821 6.95711L10.2526 18.2867C9.86452 18.6747 9.23627 18.6775 8.84475 18.293L2.29929 11.8644C1.90527 11.4774 1.89956 10.8443 2.28655 10.4503C2.67354 10.0562 3.30668 10.0505 3.70071 10.4375L9.53911 16.1717L20.1679 5.54289C20.5584 5.15237 21.1916 5.15237 21.5821 5.54289Z" fill="currentColor"/>
+</svg>
+  </div>
+  <div class="stepTextBlockContent">
+      <div class="stepTextBlockDescription">Go to&nbsp;<a href="https://training.fema.gov/is/courseoverview.aspx?code=IS-700.b&amp;lang=en" style="background-color: rgb(255, 255, 255);">IS-700.B</a></div>
+  </div>
+</div>
+              <div class="card-header card-title h5 headline   " id="step-30">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-30">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>10. </b>
+                <span class="stepTitleText">Course: IS-700.B</span>
+                </div>
+              </div>
+
+
+                              
+
+              
+                        <div class="card-body substepCard">
+                              <div class="h5 substepTitle">Click &quot;Interactive Web Based Course&quot; &gt; Proceed through course</div>
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="card-image">
+                                                <img 
+                  alt="Click &quot;Interactive Web Based Course&quot; &gt; Proceed through course" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-29-0.jpeg" 
+        
+                />
+                              </div>
+
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="stepDescription substepDescription quillClasses">https://training.fema.gov/is/courseoverview.aspx?code=IS-700.b&lang=en</div>
+                          </div>
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-31">
+                <div class="stepTextBlock info card">
+  <div class="stepTextBlockIcon">
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM10.25 11C10.25 10.4477 10.6977 10 11.25 10H12.75C13.3023 10 13.75 10.4477 13.75 11V18C13.75 18.5523 13.3023 19 12.75 19H11.25C10.6977 19 10.25 18.5523 10.25 18V11ZM14 7C14 5.89543 13.1046 5 12 5C10.8954 5 10 5.89543 10 7C10 8.10457 10.8954 9 12 9C13.1046 9 14 8.10457 14 7Z" fill="currentColor"/>
+</svg>
+  </div>
+  <div class="stepTextBlockContent">
+      <div class="stepTextBlockDescription">If you are taking the exam in a separate sitting, go to&nbsp;<a href="https://training.fema.gov/is/courseoverview.aspx?code=IS-700.b&amp;lang=en" style="background-color: rgb(255, 255, 255);">IS-700.B</a><br>Otherwise you may proceed immediately after completing the course.<br></div>
+  </div>
+</div>
+              <div class="card-header card-title h5 headline   " id="step-31">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-31">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>11. </b>
+                <span class="stepTitleText">IS-700.B Exam</span>
+                </div>
+              </div>
+
+
+                              
+
+              
+                        <div class="card-body substepCard">
+                              <div class="h5 substepTitle">Click &quot;Take Final Exam Online&quot;</div>
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="card-image">
+                                                <img 
+                  alt="Click &quot;Take Final Exam Online&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-30-0.jpeg" 
+        
+                />
+                              </div>
+
+                          </div>
+                        <div class="card-body substepCard">
+                          </div>
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-32">
+              <div class="card-header card-title h5 headline   " id="step-32">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-32">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>12. </b>
+                <span class="stepTitleText">Course: IS-800.D</span>
+                </div>
+              </div>
+
+
+                                  <div class="stepTextBlock success card">
+  <div class="stepTextBlockIcon">
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M21.5821 5.54289C21.9726 5.93342 21.9726 6.56658 21.5821 6.95711L10.2526 18.2867C9.86452 18.6747 9.23627 18.6775 8.84475 18.293L2.29929 11.8644C1.90527 11.4774 1.89956 10.8443 2.28655 10.4503C2.67354 10.0562 3.30668 10.0505 3.70071 10.4375L9.53911 16.1717L20.1679 5.54289C20.5584 5.15237 21.1916 5.15237 21.5821 5.54289Z" fill="currentColor"/>
+</svg>
+  </div>
+  <div class="stepTextBlockContent">
+      <div class="stepTextBlockDescription">Go to&nbsp;<a href="https://training.fema.gov/is/courseoverview.aspx?code=IS-800.d&amp;lang=en" style="background-color: rgb(255, 255, 255);">IS-800.D</a></div>
+  </div>
+</div>
+              
+
+              
+                        <div class="card-body substepCard">
+                              <div class="h5 substepTitle">Click &quot;Interactive Web Based Course&quot;</div>
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="card-image">
+                                                <img 
+                  alt="Click &quot;Interactive Web Based Course&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-31-0.jpeg" 
+        
+                />
+                              </div>
+
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="stepDescription substepDescription quillClasses">https://training.fema.gov/is/courseoverview.aspx?code=IS-800.d&lang=en</div>
+                          </div>
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="columns flex-centered">
+          <div class="column col-xs-10 col-md-10 col-xl-10">
+            <div class="card stepCard" data-step-id="step-33">
+                <div class="stepTextBlock info card">
+  <div class="stepTextBlockIcon">
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM10.25 11C10.25 10.4477 10.6977 10 11.25 10H12.75C13.3023 10 13.75 10.4477 13.75 11V18C13.75 18.5523 13.3023 19 12.75 19H11.25C10.6977 19 10.25 18.5523 10.25 18V11ZM14 7C14 5.89543 13.1046 5 12 5C10.8954 5 10 5.89543 10 7C10 8.10457 10.8954 9 12 9C13.1046 9 14 8.10457 14 7Z" fill="currentColor"/>
+</svg>
+  </div>
+  <div class="stepTextBlockContent">
+      <div class="stepTextBlockDescription">If you are taking the exam in a separate sitting, go to&nbsp;<a href="https://training.fema.gov/is/courseoverview.aspx?code=IS-800.d&amp;lang=en" style="background-color: rgb(255, 255, 255);">IS-800.D</a><br>Otherwise you may proceed immediately after completing the course.<br></div>
+  </div>
+</div>
+              <div class="card-header card-title h5 headline   " id="step-33">
+                <label class="form-checkbox">
+                  <input type="checkbox" class="completionCheckbox" data-step-id="step-33">
+                  <i class="form-icon"></i>
+                </label>
+                <div class="stepTitle">
+                  <b>13. </b>
+                <span class="stepTitleText">IS-800.D Exam</span>
+                </div>
+              </div>
+
+
+                              
+
+              
+                        <div class="card-body substepCard">
+                              <div class="h5 substepTitle">Click &quot;Take Final Exam Online&quot;</div>
+                          </div>
+                        <div class="card-body substepCard">
+                              <div class="card-image">
+                                                <img 
+                  alt="Click &quot;Take Final Exam Online&quot;" 
+                  class="img-responsive stepImage" 
+        
+                  src="steps-cert_online/step-32-0.jpeg" 
+        
+                />
+                              </div>
+
+                          </div>
+                        <div class="card-body substepCard">
+                          </div>
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</body>
+</html>
